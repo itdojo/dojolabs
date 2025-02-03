@@ -10,39 +10,48 @@
 
 Generates simulated GPS data for a device in motion. Meant for importing into python scripts where you need simulated GPS input (lat/lon in [DD format](https://www.maptools.com/tutorials/lat_lon/formats)).
 
-The 'pattern' produced by this is erratic; it does not follow roads and does not respect anything on the map.  It produces output more like someone moving around otherwise aimlessly.  
+The 'pattern' produced by this directional, but not in a straight line.  The After the initial direction is randomly chosen, the path slowly drifts, producing a gradually changing path.  All I wanted was to simulate motion without having to go driving around.
 
 ## Syntax
+
 ```
-fakegps.fake_gps_movement(lat, lon, speed, number_of_updates)
+fakegps.fake_gps_movement(lat, lon, speed, number_of_updates, direction)
 ```
 
-| Input | Value
+| Input | Value | Default | Data Type
+|:--|:--|:--|:--|
+| `lat` | Starting latitude in DD format<sup>*</sup> | `36.942872` | float
+| `lon` | Starting longitude in DD format<sup>*</sup> | `-76.309913` | float
+| `speed` | Speed factored into position change (m/s) | `1.4` (~10 mph) | float
+| `number_of_updates` | How many sample readings to you want. Readings are 1/sec use this to define how many minutes of sample movement you want | `86400` (24 hours) | int
+| `direction` | 0-360 (degrees). Determines initial direction of travel. | random | float
+
+## <sup>*</sup>Starting Coordinates
+
+* Default starting coordinates are around the parking lot of the Navy Exchange on Norfolk Naval Base.
+* Use [this site](https://www.google.com/maps/place/36%C2%B056'34.6%22N+76%C2%B018'35.6%22W/@36.9406491,-76.3097768,1308m/data=!3m1!1e3!4m4!3m3!8m2!3d36.942942!4d-76.309882?entry=ttu&g_ep=EgoyMDI1MDEyOS4xIKXMDSoASAFQAw%3D%3D) and [this site](https://latitude.to/map/us/united-states/cities/norfolk-virginia) to get GPS starting coordinates you prefer.
+
+***
+
+## Speed Suggestions
+
+| Real Speed | Equivalent (Approximate) `speed` parameter
 |:--|:--|
-| `lat` | Starting latitude in DD format (default: `36.94499622`)
-| `lon` | Starting longitude in DD format (default: `-76.31333208`)
-| `speed` | Speed factored into position change (m/s) (default: `30`)
-| `number_of_updates` | How many sample readings to you want. Readings are 1/sec use this to define how many minutes of sample movement you want (default: `600` (10 minutes))
+| Walking (~3 mph = 1.34 m/s) | speed ≈ 0.2
+| Jogging (~6 mph = 2.68 m/s) | speed ≈ 0.4
+| Cycling (~28 mph = 6.7 m/s) | speed ≈ 1
+| 10 mph (4.47 m/s) | speed ≈ 1.4
+| 15 mph (6.7 m/s) | speed ≈ 1.7
+| 30 mph (13.4 m/s) | speed ≈ 4.2
+| 50 mph (22.4 m/s) | speed ≈ 7
+| 55 mph (24.6 m/s) | speed ≈ 7.8
+| 70 mph (31.3 m/s) | speed ≈ 9.8
+| 100 mph (44.7 m/s) | speed ≈ 14
+| 500 mph (223.5 m/s) | speed ≈ 70
 
-## Starting Coordinates
-* Starting coordinates are the Navy Exchange on Norfolk Naval Base.
-* Use [this](https://www.google.com/maps/@36.942166,-76.3105843,854m/data=!3m1!1e3?hl=en&entry=ttu&g_ep=EgoyMDI1MDEyOS4xIKXMDSoASAFQAw%3D%3D) and [this](https://latitude.to/map/us/united-states/cities/norfolk-virginia) to get GPS starting coordinates you prefer.
+***
 
-## Speed
-| Value | Approximation
-|:--|:--|
-| `1` | A human walking around
-| `2-4` | A human running/jogging
-| `8` | A person riding a bike (~20 MPH)
-| `13` - `29` | ~Range of various DJI drone top speeds (~30-65MPH)
-| `25` | ~55 PMH
-| `31` | ~70 MPH
-| `44` | ~100 MPH
-| `53`-`70` | Fastest FPV drones I have heard of
-| `223` | ~500 MPH
-| `342` | ~Speed of sound (~767 MPH)
-
-## Usage
+## `fakegps.py` Usage
 ```python
 import fakegps
 
@@ -51,16 +60,19 @@ fakegps.fake_gps_movement()
 
 
 # Control all inputs
-fakegps.fake_gps_movement(lat=30.489831374, lon=-81.685997256, speed=600, number_of_updates=86400)
+fakegps.fake_gps_movement(lat=36.942872, lon=-81.685997256, speed=14, number_of_updates=600, direction=45.5)
 ```
 
 ### Sample output
 ```
-36.944998, -76.31338
-36.945394, -76.31366
-36.945639, -76.313505
-36.945968, -76.31354
-36.945939, -76.313164
+36.938279, -81.679251
+36.943189, -81.682568
+36.945242, -81.688129
+36.948757, -81.681512
+36.948966, -81.679992
+36.952845, -81.68056
+36.947602, -81.675186
+36.945541, -81.675131
 ```
 
 ***
@@ -75,7 +87,7 @@ You can control the frequency of open/close transitions (but still random-ish) w
 * Lower (i.e. `3`) = More frequent open/close transitions (door opens and closes more often).
 * Higher (i.e. `5`) = Less frequent open/close transitions (door opens and closes less often).
 
-## Syntax & Usage
+## `doorstatus.py` Syntax & Usage
 
 Returns a dict in the form: `{"door_status": "open/closed", "old_status": "open/closed", "time_in_previous_state": "seconds (string)"}`
 
