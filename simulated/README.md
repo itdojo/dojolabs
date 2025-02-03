@@ -38,7 +38,7 @@ fakegps.fake_gps_movement(lat, lon, speed, number_of_updates)
 ```python
 import fakegps
 
-# Simple
+# Simple Usage
 fakegps.fake_gps_movement()
 
 
