@@ -1,3 +1,11 @@
+# Contents
+
+* [fakegps.py](#fakegpspy)
+* [doorstatus.py](#doorstatuspy)
+
+
+***
+
 # fakegps.py
 
 Generates simulated GPS data for a device in motion. Meant for importing into python scripts where you need simulated GPS input (lat/lon in [DD format](https://www.maptools.com/tutorials/lat_lon/formats)).
@@ -56,3 +64,46 @@ fakegps.fake_gps_movement(lat=30.489831374, lon=-81.685997256, speed=600, number
 ```
 
 ***
+
+# doorstatus.py
+
+Simulated open/close events for a door (or anything else that opens/closes).  This is primarily intended for use by importing into other scripts but you can execute it directly, too.  
+
+The open/close transitions are intended to be random and typically range from a few seconds to well over a minute.
+
+You can control the frequency of open/close transitions (but still random-ish) with `threshhold`.
+* Lower (i.e. `3`) = More frequent open/close transitions (door opens and closes more often).
+* Higher (i.e. `5`) = Less frequent open/close transitions (door opens and closes less often).
+
+## Syntax & Usage
+
+Returns a dict in the form: `{"door_status": "open/closed", "old_status": "open/closed", "time_in_previous_state": "seconds (string)"}`
+
+```python
+import doorstatus
+
+for event in emulate_door_state_transition():
+    print(f"Door status: {event['door_status']}, Old status: {event['old_status']}, Time in previous state: {event['time_in_previous_state']}s")
+```
+
+Example output:
+
+```python
+>>> import doorstatus
+>>> for door_event in doorstatus.emulate_door_state_transition():
+...     door_event
+... 
+
+{'door_status': 'open', 'old_status': 'closed', 'time_in_previous_state': '3.01'}
+{'door_status': 'closed', 'old_status': 'open', 'time_in_previous_state': '34.14'}
+{'door_status': 'open', 'old_status': 'closed', 'time_in_previous_state': '7.03'}
+{'door_status': 'closed', 'old_status': 'open', 'time_in_previous_state': '5.02'}
+{'door_status': 'open', 'old_status': 'closed', 'time_in_previous_state': '37.14'}
+{'door_status': 'closed', 'old_status': 'open', 'time_in_previous_state': '28.11'}
+{'door_status': 'open', 'old_status': 'closed', 'time_in_previous_state': '33.12'}
+{'door_status': 'closed', 'old_status': 'open', 'time_in_previous_state': '53.22'}
+{'door_status': 'open', 'old_status': 'closed', 'time_in_previous_state': '4.01'}
+{'door_status': 'closed', 'old_status': 'open', 'time_in_previous_state': '15.05'}
+{'door_status': 'open', 'old_status': 'closed', 'time_in_previous_state': '51.20'}
+{'door_status': 'closed', 'old_status': 'open', 'time_in_previous_state': '69.26'}
+```
