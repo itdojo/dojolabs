@@ -25,6 +25,7 @@ fakegps.fake_gps_movement(lat, lon, speed, number_of_updates, direction)
 | `speed` | Speed factored into position change (m/s) | `1.4` (~10 mph) | float
 | `number_of_updates` | How many sample readings to you want. Readings are 1/sec use this to define how many minutes of sample movement you want | `86400` (24 hours) | int
 | `direction` | 0-360 (degrees). Determines initial direction of travel. | random | float
+| `straight_line` | Go in straight line or slowly change direction | `False` | boolean
 
 ## <sup>*</sup>Starting Coordinates
 
@@ -34,6 +35,10 @@ fakegps.fake_gps_movement(lat, lon, speed, number_of_updates, direction)
 ***
 
 ## Speed Suggestions
+
+The speed values below are approximations.
+
+> Note: Because direction changes the total distance will be less than the estimated MPH.
 
 | Real Speed | Equivalent (Approximate) `speed` parameter
 |:--|:--|
@@ -47,7 +52,8 @@ fakegps.fake_gps_movement(lat, lon, speed, number_of_updates, direction)
 | 55 mph (24.6 m/s) | speed ≈ 7.8
 | 70 mph (31.3 m/s) | speed ≈ 9.8
 | 100 mph (44.7 m/s) | speed ≈ 14
-| 500 mph (223.5 m/s) | speed ≈ 70
+| 1800 mph | speed ≈ 70
+
 
 ***
 
